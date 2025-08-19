@@ -1,0 +1,26 @@
+{
+  "name": "leetcode-solutions",
+  "version": "1.0.0",
+  "main": "fetch-leetcode.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cooolfool/leetcode-solutions.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cooolfool/leetcode-solutions/issues"
+  },
+  "homepage": "https://github.com/cooolfool/leetcode-solutions#readme",
+  "description": "",
+  "devDependencies": {
+    "@playwright/test": "^1.54.2"
+  }
+}
