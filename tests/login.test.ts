@@ -1,20 +1,22 @@
 import { test, expect } from '@playwright/test';
 
 test('LeetCode login flow', async ({ page }) => {
-  // Navigate to login page
   await page.goto('https://leetcode.com/accounts/login/');
 
-  // Fill username + password from env
-  await page.fill('input[name="login"]', process.env.LEETCODE_USERNAME!);
-  await page.fill('input[name="password"]', process.env.LEETCODE_PASSWORD!);
+  // Wait until login form appears
+  await page.waitForSelector('input[name="login"], input#id_login', { timeout: 20000 });
 
-  // Click login button
-  await page.click('button[type="submit"]');
+  // Fill username + password
+  await page.fill('input[name="login"], input#id_login', process.env.LEETCODE_USERNAME!);
+  await page.fill('input[name="password"], input#id_password', process.env.LEETCODE_PASSWORD!);
 
-  // Wait for navigation to dashboard or profile page
-  await page.waitForURL('**/problemset/all/', { timeout: 15000 });
+  // Click login button (handle both possible selectors)
+  await page.click('button[type="submit"], button[id="signin_btn"]');
 
-  // Check user menu/profile exists
+  // Wait for navigation after login
+  await page.waitForURL('**/problemset/all/**', { timeout: 20000 });
+
+  // Assert login worked by checking avatar
   const profileIcon = page.locator('img[alt="Avatar"]');
-  await expect(profileIcon).toBeVisible();
+  await expect(profileIcon).toBeVisible({ timeout: 10000 });
 });
