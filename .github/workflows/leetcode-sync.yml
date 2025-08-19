@@ -1,0 +1,36 @@
+name: Sync LeetCode Submissions
+
+on:
+  schedule:
+    - cron: "0 */1 * * *"   # runs every 1 hours
+  workflow_dispatch:        # manual trigger
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Install leetcode-cli
+        run: npm install -g leetcode-cli
+
+      - name: Login to LeetCode
+        run: leetcode user -l -u ${{ secrets.LEETCODE_USERNAME }} -p ${{ secrets.LEETCODE_PASSWORD }}
+
+      - name: Fetch accepted submissions
+        run: leetcode submit -a   # or use leetcode-cli-plugins to dump submissions
+
+      - name: Commit & push to GitHub
+        run: |
+          git config --global user.name "leetcode-bot"
+          git config --global user.email "leetcode-bot@example.com"
+          git add .
+          git commit -m "Sync latest LeetCode submissions"
+          git push https://x-access-token:${{ secrets.TOKEN }}@github.com/${{ github.repository }}.git HEAD:main
