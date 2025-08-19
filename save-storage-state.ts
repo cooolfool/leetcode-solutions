@@ -12,8 +12,8 @@ async function run() {
   await page.goto("https://leetcode.com/accounts/login/");
 
   // fill login
-  await page.fill("#id_login", process.env.LEETCODE_USER!);
-  await page.fill("#id_password", process.env.LEETCODE_PASS!);
+  await page.fill("#id_login", process.env.LEETCODE_USERNAME);
+  await page.fill("#id_password", process.env.LEETCODE_PASSWORD);
   await page.click("button[type=submit]");
 
   // wait for redirect
