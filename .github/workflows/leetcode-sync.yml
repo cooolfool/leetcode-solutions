@@ -3,7 +3,7 @@ name: Sync LeetCode Submissions
 on:
   schedule:
     - cron: "0 */1 * * *"   # every 1 hours
-  workflow_dispatch:        # manual trigger
+  workflow_dispatch:
 
 jobs:
   sync:
@@ -21,18 +21,17 @@ jobs:
       - name: Install leetcode-cli + plugin
         run: |
           npm install -g leetcode-cli
-          leetcode plugin -i company
-          leetcode plugin -i solution.discuss
-          leetcode plugin -i submission # 👈 important for fetching submissions
+          leetcode plugin -i submission
 
       - name: Login to LeetCode
         run: leetcode user -l -u ${{ secrets.LEETCODE_USERNAME }} -p ${{ secrets.LEETCODE_PASSWORD }}
 
-      - name: Fetch accepted submissions
-        run: leetcode submission -a -x -o ./leetcode_solutions
-        # -a → fetch all
-        # -x → export code
-        # -o → output folder
+      - name: Export submissions JSON
+        run: leetcode submission -a -o ./submissions.json --json
+
+      - name: Organize solutions
+        run: |
+          node organize.js
 
       - name: Commit & push to GitHub
         run: |
