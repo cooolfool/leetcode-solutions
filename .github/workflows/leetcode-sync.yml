@@ -1,42 +1,37 @@
-name: Sync LeetCode Submissions
+name: LeetCode Sync (API)
 
 on:
   schedule:
     - cron: "0 */1 * * *"   # every 1 hours
-  workflow_dispatch:
+  workflow_dispatch:        # allow manual run
+
+permissions:
+  contents: write           # allow pushing with GITHUB_TOKEN
 
 jobs:
   sync:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: "18"
 
-      - name: Install leetcode-cli + plugin
+      - name: Run sync
+        env:
+          LEETCODE_USERNAME: ${{ secrets.LEETCODE_USERNAME }}
+          LEETCODE_PASSWORD: ${{ secrets.LEETCODE_PASSWORD }}
         run: |
-          npm install -g leetcode-cli
-          leetcode plugin -i submission
+          node -v
+          node fetch-leetcode.js
 
-      - name: Login to LeetCode
-        run: leetcode user -l -u ${{ secrets.LEETCODE_USERNAME }} -p ${{ secrets.LEETCODE_PASSWORD }}
-
-      - name: Export submissions JSON
-        run: leetcode submission -a -o ./submissions.json --json
-
-      - name: Organize solutions
+      - name: Commit & push
         run: |
-          node organize.js
-
-      - name: Commit & push to GitHub
-        run: |
-          git config --global user.name "leetcode-bot"
+          git config --global user.name  "leetcode-bot"
           git config --global user.email "leetcode-bot@example.com"
-          git add leetcode_solutions
-          git commit -m "Sync latest LeetCode submissions" || echo "No changes to commit"
-          git push https://x-access-token:${{ secrets.TOKEN }}@github.com/${{ github.repository }}.git HEAD:main
+          git add -A
+          git commit -m "Sync: update accepted submissions" || echo "No changes"
+          git push
