@@ -20,9 +20,9 @@ function cookieHeader() {
 }
 
 function setCookiesFromResponse(res) {
-  const setCookie = res.headers.get("set-cookie");
-  if (!setCookie) return;
-  const parts = setCookie.split(/,(?=[^;]+=[^;]+)/g);
+  const setCookieHeader = res.headers.get("set-cookie");
+  if (!setCookieHeader) return;
+  const parts = setCookieHeader.split(/,(?=[^;]+=[^;]+)/g);
   parts.forEach((c) => {
     const [kv] = c.split(";");
     const [k, v] = kv.trim().split("=");
