@@ -1,7 +1,8 @@
 import { test, expect } from '@playwright/test';
+test.use({ storageState: "auth.json" }); 
 
 test('LeetCode login flow', async ({ page }) => {
-  await page.goto('https://leetcode.com/accounts/login/');
+   await page.goto("https://leetcode.com/submissions/");
 
   // Wait until login form appears
   await page.waitForSelector('input[name="login"], input#id_login', { timeout: 20000 });
