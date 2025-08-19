@@ -17,8 +17,12 @@ jobs:
         run: |
           npm install
           npx playwright install --with-deps
-      - name: Run login test
+
+      - name: Generate auth.json
+        run: npx tsx save-storage-state.ts
         env:
           LEETCODE_USERNAME: ${{ secrets.LEETCODE_USERNAME }}
           LEETCODE_PASSWORD: ${{ secrets.LEETCODE_PASSWORD }}
+      - name: Run login test
+      
         run: npx playwright test tests/login.test.ts
