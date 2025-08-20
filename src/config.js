@@ -23,7 +23,7 @@ const OUTPUT_ROOT = "."; // repo root
 const STATE_FILE = "last_sync.json";
 
 // Tuning
-const MAX_RECENT = Number(process.env.MAX_RECENT || 100);
+const MAX_RECENT = Number(200);
 const SYNC_POLL_SECONDS = Number(process.env.SYNC_POLL_SECONDS || 0);
 
 // Git
