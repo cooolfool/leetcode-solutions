@@ -24,7 +24,7 @@
     "@playwright/test": "^1.54.2"
   },
   "dependencies": {
-    "dotenv": "^16.4.5",
+    "dotenv": "^16.6.1",
     "undici": "^6.19.8"
   }
 }
