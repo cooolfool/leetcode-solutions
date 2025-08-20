@@ -20,14 +20,16 @@ jobs:
         with:
           node-version: "18"
 
-      - name: Run sync
+      - name: Run fetch-leetcode.js
         env:
           LEETCODE_USERNAME: ${{ secrets.LEETCODE_USERNAME }}
           LEETCODE_PASSWORD: ${{ secrets.LEETCODE_PASSWORD }}
-        run: |
-          node -v
-          node fetch-leetcode.js
-
+          # OR
+          LEETCODE_SESSION: ${{ secrets.LEETCODE_SESSION }}
+          LEETCODE_CSRFTOKEN: ${{ secrets.LEETCODE_CSRFTOKEN }}
+          # OR
+          LEETCODE_COOKIES: ${{ secrets.LEETCODE_COOKIES }}
+        run: node fetch-leetcode.js
       - name: Commit & push
         run: |
           git config --global user.name  "leetcode-bot"
