@@ -2,16 +2,16 @@ const fs = require("fs");
 const path = require("path");
 
 // Load .env from project root if present
-try {
-  const dotenv = require("dotenv");
-  const envPath = path.resolve(process.cwd(), ".env");
-  const result = dotenv.config(fs.existsSync(envPath) ? { path: envPath } : {});
-  if (result && result.error) {
-    console.warn("Warning: .env not loaded:", result.error.message);
-  }
-} catch (e) {
-  console.warn('Warning: "dotenv" not installed; env will only come from the shell.');
-}
+//try {
+//  const dotenv = require("dotenv");
+//  const envPath = path.resolve(process.cwd(), ".env");
+//  const result = dotenv.config(fs.existsSync(envPath) ? { path: envPath } : {});
+//  if (result && result.error) {
+//    console.warn("Warning: .env not loaded:", result.error.message);
+//  }
+//} catch (e) {
+//  console.warn('Warning: "dotenv" not installed; env will only come from the shell.');
+//}
 
 // Base URLs
 const BASE = "https://leetcode.com";
@@ -23,7 +23,7 @@ const OUTPUT_ROOT = "."; // repo root
 const STATE_FILE = "last_sync.json";
 
 // Tuning
-const MAX_RECENT = Number(200);
+const MAX_RECENT = Number(20000);
 const SYNC_POLL_SECONDS = Number(process.env.SYNC_POLL_SECONDS || 0);
 
 // Git
