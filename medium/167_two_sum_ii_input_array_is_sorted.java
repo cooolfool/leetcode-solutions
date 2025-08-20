@@ -10,10 +10,11 @@ class Solution {
                 break;
             }
             else if(nums[low]+nums[high] > target){
-                //Target lies in left part
+               //the sum is greater than the target so updating high value to lower one as array is sorted
                 high--;
             }
             else{
+                 //the sum is lesser than the target so updating low value to highr one as array is sorted
                 low++;
             }
         }

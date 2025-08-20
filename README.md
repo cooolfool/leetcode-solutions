@@ -21,6 +21,7 @@ Auto-synced from LeetCode accepted submissions. Folder structure: `<difficulty>/
 ## Medium
 | Problem | File |
 |---|---|
+| [15. 3sum](https://leetcode.com/problems/3sum/) | [15_3sum.java](medium/15_3sum.java) |
 | [29. divide](https://leetcode.com/problems/divide/) | [29_divide_two_integers.py](medium/29_divide_two_integers.py) |
 | [34. find](https://leetcode.com/problems/find/) | [34_find_first_and_last_position_of_element_in_sorted_array.java](medium/34_find_first_and_last_position_of_element_in_sorted_array.java) |
 | [73. set](https://leetcode.com/problems/set/) | [73_set_matrix_zeroes.java](medium/73_set_matrix_zeroes.java) |
