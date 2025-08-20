@@ -3,6 +3,7 @@ Auto-synced from LeetCode accepted submissions. Folder structure: `<difficulty>/
 ## Easy
 | Problem | File |
 |---|---|
+| [1. two](https://leetcode.com/problems/two/) | [1_two_sum.java](easy/1_two_sum.java) |
 | [88. merge](https://leetcode.com/problems/merge/) | [88_merge_sorted_array.java](easy/88_merge_sorted_array.java) |
 | [100. same](https://leetcode.com/problems/same/) | [100_same_tree.java](easy/100_same_tree.java) |
 | [101. symmetric](https://leetcode.com/problems/symmetric/) | [101_symmetric_tree.java](easy/101_symmetric_tree.java) |
@@ -21,6 +22,7 @@ Auto-synced from LeetCode accepted submissions. Folder structure: `<difficulty>/
 ## Medium
 | Problem | File |
 |---|---|
+| [3. longest](https://leetcode.com/problems/longest/) | [3_longest_substring_without_repeating_characters.java](medium/3_longest_substring_without_repeating_characters.java) |
 | [15. 3sum](https://leetcode.com/problems/3sum/) | [15_3sum.java](medium/15_3sum.java) |
 | [29. divide](https://leetcode.com/problems/divide/) | [29_divide_two_integers.py](medium/29_divide_two_integers.py) |
 | [34. find](https://leetcode.com/problems/find/) | [34_find_first_and_last_position_of_element_in_sorted_array.java](medium/34_find_first_and_last_position_of_element_in_sorted_array.java) |
