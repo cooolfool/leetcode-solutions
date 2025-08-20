@@ -36,6 +36,7 @@ Auto-synced from LeetCode accepted submissions. Folder structure: `<difficulty>/
 | [238. product](https://leetcode.com/problems/product/) | [238_product_of_array_except_self.java](medium/238_product_of_array_except_self.java) |
 | [240. search](https://leetcode.com/problems/search/) | [240_search_a_2d_matrix_ii.java](medium/240_search_a_2d_matrix_ii.java) |
 | [287. find](https://leetcode.com/problems/find/) | [287_find_the_duplicate_number.java](medium/287_find_the_duplicate_number.java) |
+| [380. insert](https://leetcode.com/problems/insert/) | [380_insert_delete_getrandom_o1.java](medium/380_insert_delete_getrandom_o1.java) |
 | [1423. maximum](https://leetcode.com/problems/maximum/) | [1423_maximum_points_you_can_obtain_from_cards.java](medium/1423_maximum_points_you_can_obtain_from_cards.java) |
 | [2348. number](https://leetcode.com/problems/number/) | [2348_number_of_zero_filled_subarrays.py](medium/2348_number_of_zero_filled_subarrays.py) |
 
