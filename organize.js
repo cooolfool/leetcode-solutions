@@ -1,3 +1,17 @@
+/**
+ * LeetCode -> GitHub sync (no CLI).
+ * - Logs into leetcode.com using username/password from env.
+ * - Fetches recent AC submissions via GraphQL.
+ * - For each, fetches submission details (code/lang) + question info (difficulty/id).
+ * - Saves to <difficulty>/<id>_<slug>.<ext> (e.g. easy/1_two-sum.py)
+ * - Maintains last_sync.json to avoid duplicates.
+ * - Generates/updates README.md index.
+ * - If there are new solutions, auto-commits and pushes to the configured git remote/branch.
+ *
+ * NOTE: LeetCode site internals can change. This script reflects the public site flow as of now.
+ */
+
+
 const fs = require("fs");
 const path = require("path");
 
