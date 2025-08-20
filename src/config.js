@@ -24,7 +24,7 @@ const STATE_FILE = "last_sync.json";
 
 // Tuning
 const MAX_RECENT = Number(20000);
-const SYNC_POLL_SECONDS = Number(process.env.SYNC_POLL_SECONDS || 0);
+const SYNC_POLL_SECONDS = Number(1);
 
 // Git
 const GIT_REMOTE = process.env.GIT_REMOTE || "origin";
