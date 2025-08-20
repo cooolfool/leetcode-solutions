@@ -20,6 +20,9 @@ jobs:
         with:
           node-version: "18"
 
+      - name: Install dependencies
+        run: npm install dotenv   
+
       - name: Run fetch-leetcode.js
         env:
           LEETCODE_USERNAME: ${{ secrets.LEETCODE_USERNAME }}
