@@ -32,11 +32,11 @@ async function runOnce() {
   } catch (e) {
     console.log("GraphQL recent list failed, falling back to REST:", e.message);
   }
-  if (!Array.isArray(recent) || recent.length === 0) {
-    console.log("Falling back to /api/submissions/…");
-    recent = await fetchRecentAcceptedViaRest(MAX_RECENT);
-    console.log("Fetched recent submissions via REST:", recent);
-  }
+  // if (!Array.isArray(recent) || recent.length === 0) {
+  //   console.log("Falling back to /api/submissions/…");
+  //   recent = await fetchRecentAcceptedViaRest(MAX_RECENT);
+  //   console.log("Fetched recent submissions via REST:", recent);
+  // }
 
   let newCount = 0;
 
