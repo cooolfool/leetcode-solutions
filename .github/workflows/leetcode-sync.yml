@@ -2,7 +2,7 @@ name: LeetCode Sync (API)
 
 on:
   schedule:
-    - cron: "0 */1 * * *"   # every 1 hours
+    - cron: "0 */8 * * *"   # every 8 hours
   workflow_dispatch:        # allow manual run
 
 permissions:
@@ -35,8 +35,8 @@ jobs:
         run: node fetch-leetcode.js
       - name: Commit & push
         run: |
-          git config --global user.name  "leetcode-bot"
-          git config --global user.email "leetcode-bot@example.com"
+          git config --global user.name  "your_fav_bot"
+          git config --global user.email "your_fav_bot@example.com"
           git add -A
           git commit -m "Sync: update accepted submissions" || echo "No changes"
           git push

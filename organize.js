@@ -55,4 +55,4 @@ console.log(`Processing submission: ${sub.id} - ${sub.titleSlug}`);
   fs.writeFileSync(filepath, sub.code, "utf-8");
 });
 
-console.log("✅ Organized solutions into leetcode_solutions/");
+console.log("Organized solutions into leetcode_solutions/");

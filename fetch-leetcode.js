@@ -1,107 +1,57 @@
-const { SYNC_POLL_SECONDS, MAX_RECENT, USERNAME } = require("./src/config");
-const { login } = require("./src/login");
-const { fetchSignedInUsername, fetchRecentAC, fetchSubmissionDetails, fetchQuestion } = require("./src/graphql");
-const { fetchRecentAcceptedViaRest, fetchSubmissionDetailsViaRest } = require("./src/rest");
-const { loadState, saveState } = require("./src/state");
-const { writeSolution, generateReadmeIndex } = require("./src/files");
-const { commitAndPush } = require("./src/git");
-const { sleep } = require("./src/utils");
+import fetch from "node-fetch";
+import fs from "fs";
+import "dotenv/config";
+import { LEETCODE_SESSION, PAGE_SIZE, MAX_FETCH, OUTPUT_FILE, BASE_URL, REQUEST_DELAY_MS } from "./config.js";
 
-async function runOnce() {
-  console.log("Logging in…");
-  await login();
-  console.log("OK");
-
-  let username = USERNAME;
-  if (!username) {
-    username = await fetchSignedInUsername();
-  }
-  if (!username) {
-    throw new Error("Could not determine username for recent submissions. Set LEETCODE_USERNAME or provide valid cookies.");
-  }
-  console.log(`Using username: ${username}`);
-
-  const state = loadState();
-  const processed = new Set(state.processed);
-
-  console.log("Fetching recent AC submissions…");
-  let recent = [];
-  try {
-    recent = await fetchRecentAC(MAX_RECENT, username);
-    console.log("Fetched recent submissions via GraphQL:", recent);
-  } catch (e) {
-    console.log("GraphQL recent list failed, falling back to REST:", e.message);
-  }
-  if (!Array.isArray(recent) || recent.length === 0) {
-    console.log("Falling back to /api/submissions/…");
-    recent = await fetchRecentAcceptedViaRest(MAX_RECENT);
-    console.log("Fetched recent submissions via REST:", recent);
-  }
-
-  let newCount = 0;
-
-  for (const item of recent) {
-    const sid = String(item.id);
-    if (processed.has(sid)) continue;
-    await sleep(500);
-
-    let details = null;
-    try {
-      details = await fetchSubmissionDetails(sid);
-    } catch (e) {
-      console.warn(`GraphQL submissionDetails failed for ${sid}:`, e.message);
-    }
-    if (!details || !details.code) {
-      const rest = await fetchSubmissionDetailsViaRest(item.titleSlug, sid);
-      if (!rest || !rest.code) continue;
-      details = rest;
-    }
-
-    const slug = details.question?.titleSlug || item.titleSlug;
-    const q = await fetchQuestion(slug);
-
-    const payload = {
-      difficulty: q?.difficulty || "Unknown",
-      questionId: q?.questionFrontendId || q?.questionId || "unknown",
-      titleSlug: slug,
-      code: details.code,
-      language: details.language || details.lang?.name || details.lang,
-    };
-
-    const { fpath } = writeSolution(payload);
-    console.log("Saved:", fpath);
-
-    processed.add(sid);
-    newCount++;
-  }
-
-  saveState({ processed: Array.from(processed) });
-  generateReadmeIndex();
-
-  console.log(`Done. New solutions this run: ${newCount}`);
-
-  if (newCount > 0) {
-    console.log("Committing and pushing changes…");
-    commitAndPush(newCount);
-  }
+// -----------------------------------------
+if (!LEETCODE_SESSION) {
+  console.error("Missing LEETCODE_SESSION in .env file");
+  process.exit(1);
 }
 
-(async () => {
-  if (SYNC_POLL_SECONDS > 0) {
-    while (true) {
-      try {
-        await runOnce();
-      } catch (err) {
-        console.error("FAILED:", err.message);
-      }
-      const delayMs = Math.max(5, SYNC_POLL_SECONDS) * 1000;
-      console.log(`Sleeping ${Math.floor(delayMs / 1000)}s…`);
-      await sleep(delayMs);
+async function fetchSubmissions() {
+  let all = [];
+  let offset = 0;
+  let page = 1;
+
+  console.log(`Fetching recent accepted submissions (limit: ${MAX_FETCH}, pageSize: ${PAGE_SIZE})…`);
+
+  while (true) {
+    const url = `${BASE_URL}?offset=${offset}&limit=${PAGE_SIZE}&lastkey=`;
+    console.log(`Page ${page}: offset=${offset}`);
+
+    const res = await fetch(url, {
+      headers: {
+        Cookie: `LEETCODE_SESSION=${LEETCODE_SESSION};`,
+        "User-Agent": "Mozilla/5.0",
+      },
+    });
+
+    if (res.status === 403) {
+      console.error("403 Forbidden – check if LEETCODE_SESSION is valid");
+      process.exit(1);
     }
-  } else {
-    await runOnce();
+
+    const data = await res.json();
+
+    // filter only Accepted
+    const accepted = data.submissions_dump.filter((s) => s.status_display === "Accepted");
+    all.push(...accepted);
+
+    if (!data.has_next || all.length >= MAX_FETCH) break;
+
+    offset += PAGE_SIZE;
+    page++;
+    await new Promise((r) => setTimeout(r, REQUEST_DELAY_MS));
   }
-})().catch((err) => {
-  console.error("FAILED:", err.message);
+
+  console.log(`Done. Total accepted submissions fetched: ${all.length}`);
+
+  fs.writeFileSync(OUTPUT_FILE, JSON.stringify(all, null, 2));
+  console.log(`Saved to ${OUTPUT_FILE}`);
+}
+
+fetchSubmissions().catch((err) => {
+  console.error("Error fetching submissions:", err.message);
   process.exit(1);
 });
