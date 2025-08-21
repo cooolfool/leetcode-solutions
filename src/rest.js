@@ -51,7 +51,7 @@ async function fetchRecentAcceptedViaRest(limit = 200, pageSize = 20) {
     // seenPageKeys.add(nextKey);
     // lastKey = nextKey;
 
-    await new Promise(r => setTimeout(r, 300)); // safer wait
+    await new Promise(r => setTimeout(r, 1500)); // safer wait
   }
 
   return accepted.slice(0, limit);
