@@ -37,19 +37,36 @@ async function fetchSignedInUsername() {
   return data?.userStatus?.username || null;
 }
 
-async function fetchRecentAC(limit, username) {
-  const query = `
-    query recentAcSubmissions($limit: Int!, $username: String!) {
-      recentAcSubmissionList(limit: $limit, username: $username) {
-        id
-        title
-        titleSlug
-        timestamp
+async function fetchRecentAC(username, totalLimit = 200, pageSize = 20) {
+ let allSubs = [];
+  let page = 0;
+
+  while (allSubs.length < totalLimit) {
+    const data = await graphQL(
+      `
+      query recentAcSubmissions($limit: Int!, $skip: Int!, $username: String!) {
+        recentAcSubmissionList(limit: $limit, skip: $skip, username: $username) {
+          id
+          title
+          titleSlug
+          timestamp
+        }
       }
+      `,
+      { limit: pageSize, skip: page * pageSize, username }
+    );
+
+    const subs = data.recentAcSubmissionList || [];
+    allSubs.push(...subs);
+
+    if (subs.length < pageSize) {
+      break; // last page reached (no more submissions)
     }
-  `;
-  const data = await graphQL(query, { limit, username });
-  return data.recentAcSubmissionList || [];
+
+    page++;
+  }
+
+  return allSubs.slice(0, totalLimit);
 }
 
 async function fetchSubmissionDetails(submissionId) {
