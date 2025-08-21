@@ -12,7 +12,7 @@ async function fetchRecentAcceptedViaRest(limit = 200, pageSize = 20) {
   const seenSubmissionIds = new Set();
   const seenPageKeys = new Set();
   let offset = 0;
-  while (accepted.length < limit && hasNext) {
+  while (accepted.length < limit) {
     
     const url = `${BASE}/api/submissions/?offset=${offset}&limit=${pageSize}&lastkey=${encodeURIComponent(lastKey)}`;
     offset += pageSize;
@@ -43,10 +43,10 @@ async function fetchRecentAcceptedViaRest(limit = 200, pageSize = 20) {
       }
     }
 
-    hasNext = Boolean(data?.has_next ?? data?.hasNext);
+    //hasNext = Boolean(data?.has_next ?? data?.hasNext);
     const nextKey = data?.last_key || data?.lastKey || "";
 
-    if (!hasNext || !nextKey || seenPageKeys.has(nextKey)) break;
+    if ( !nextKey || seenPageKeys.has(nextKey)) break;
 
     seenPageKeys.add(nextKey);
     lastKey = nextKey;
