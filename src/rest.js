@@ -11,9 +11,11 @@ async function fetchRecentAcceptedViaRest(limit = 200, pageSize = 20) {
 
   const seenSubmissionIds = new Set();
   const seenPageKeys = new Set();
-
+  let offset = 0;
   while (accepted.length < limit && hasNext) {
-    const url = `${BASE}/api/submissions/?limit=${pageSize}&lastkey=${encodeURIComponent(lastKey)}`;
+    
+    const url = `${BASE}/api/submissions/?offset=${offset}&limit=${pageSize}&lastkey=${encodeURIComponent(lastKey)}`;
+    offset += pageSize;
     console.log(`Requesting ${url}`);
     const res = await httpGet(url, { Referer: BASE });
 
