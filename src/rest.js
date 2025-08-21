@@ -14,7 +14,7 @@ async function fetchRecentAcceptedViaRest(limit = 200, pageSize = 20) {
   let offset = 0;
   while (accepted.length < limit) {
     
-    const url = `${BASE}/api/submissions/?offset=${offset}&limit=${pageSize}&lastkey=${encodeURIComponent(lastKey)}`;
+    const url = `${BASE}/api/submissions/?offset=${offset}&limit=20&lastkey=`;
     offset += pageSize;
     console.log(`Requesting ${url}`);
     const res = await httpGet(url, { Referer: BASE });
@@ -43,13 +43,13 @@ async function fetchRecentAcceptedViaRest(limit = 200, pageSize = 20) {
       }
     }
 
-    //hasNext = Boolean(data?.has_next ?? data?.hasNext);
-    const nextKey = data?.last_key || data?.lastKey || "";
+    hasNext = Boolean(data?.has_next ?? data?.hasNext);
+   // const nextKey = data?.last_key || data?.lastKey || "";
 
-    if ( !nextKey || seenPageKeys.has(nextKey)) break;
+    if (!hasNext) break;
 
-    seenPageKeys.add(nextKey);
-    lastKey = nextKey;
+    // seenPageKeys.add(nextKey);
+    // lastKey = nextKey;
 
     await new Promise(r => setTimeout(r, 300)); // safer wait
   }
