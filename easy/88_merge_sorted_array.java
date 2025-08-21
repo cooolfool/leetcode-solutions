@@ -1,9 +1,6 @@
 class Solution {
     public void merge(int[] nums1, int m, int[] nums2, int n) {
-        
-        for(int i=m;i<(m+n);i++){
-            nums1[i] = nums2[i-m];
-        }
+        System.arraycopy(nums2,0,nums1,m,n);
         Arrays.sort(nums1);
         
     }
