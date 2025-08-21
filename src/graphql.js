@@ -37,8 +37,8 @@ async function fetchSignedInUsername() {
   return data?.userStatus?.username || null;
 }
 
-async function fetchRecentAC(username, totalLimit = 200, pageSize = 20) {
- let allSubs = [];
+async function fetchRecentAC(username, totalLimit = MAX_RECENT, pageSize = 20) {
+  let allSubs = [];
   let page = 0;
 
   while (allSubs.length < totalLimit) {
@@ -59,15 +59,13 @@ async function fetchRecentAC(username, totalLimit = 200, pageSize = 20) {
     const subs = data.recentAcSubmissionList || [];
     allSubs.push(...subs);
 
-    if (subs.length < pageSize) {
-      break; // last page reached (no more submissions)
-    }
-
+    if (subs.length < pageSize) break; // no more submissions
     page++;
   }
 
   return allSubs.slice(0, totalLimit);
 }
+
 
 async function fetchSubmissionDetails(submissionId) {
   const query = `

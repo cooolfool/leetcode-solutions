@@ -31,8 +31,9 @@ if (!fs.existsSync(outputDir)) {
 
 submissions.forEach((sub) => {
   if (sub.status !== "Accepted") return;
-
+console.log(`Processing submission: ${sub.id} - ${sub.titleSlug}`);
   const difficulty = sub.level.toLowerCase(); // easy, medium, hard
+  console.log(`Difficulty: ${difficulty}`);
   const problemId = sub.id || sub.qid || "unknown";
   const slug = sub.titleSlug.replace(/[^a-z0-9]/gi, "_");
   const ext = sub.lang.toLowerCase().includes("java")

@@ -1,64 +1,76 @@
 const { BASE } = require("./config");
 const { httpGet } = require("./http");
 
-async function fetchRecentAcceptedViaRest(limit) {
-  let offset = 0;
-  const pageSize = Math.min(50, limit);
-  const accepted = [];
-  let hasNext = true;
-  let lastKey = "";
+async function fetchRecentAcceptedViaRest(limit = 200, pageSize = 20) {
+  if (limit <= 0) return [];
 
-  while (accepted.length < limit && hasNext !== false) {
-    const url = `${BASE}/api/submissions/?offset=${offset}&limit=${pageSize}&lastkey=${encodeURIComponent(
-      lastKey || ""
-    )}`;
+  const accepted = [];
+  let lastKey = "";
+  let hasNext = true;
+
+  const seenSubmissionIds = new Set(); 
+  const seenPageKeys = new Set();     
+
+  while (accepted.length < limit && hasNext) {
+    const url = `${BASE}/api/submissions/?offset=0&limit=${pageSize}&lastkey=${encodeURIComponent(lastKey)}`;
     const res = await httpGet(url, { Referer: BASE });
-    if (res.status !== 200) break;
+
+    if (!res.ok) {
+      throw new Error(`Failed to fetch submissions: ${res.status} ${res.statusText}`);
+    }
+
     const data = await res.json();
-    const list = Array.isArray(data?.submissions_dump)
-      ? data.submissions_dump
-      : [];
-    list.forEach((s) => {
-      if (
-        s &&
-        (s.status_display === "Accepted" || s.statusDisplay === "Accepted") &&
-        typeof s.id !== "undefined"
-      ) {
-        accepted.push({
-          id: String(s.id),
-          title: s.title,
-          titleSlug: s.title_slug || s.titleSlug,
-          timestamp: s.timestamp || s.time || 0,
-        });
+    const list = Array.isArray(data?.submissions_dump) ? data.submissions_dump : [];
+
+    for (const s of list) {
+      const isAC = s?.status_display === "Accepted" || s?.statusDisplay === "Accepted";
+      if (isAC && s?.id != null) {
+        const id = String(s.id);
+        if (!seenSubmissionIds.has(id)) {
+          accepted.push({
+            id,
+            title: s.title,
+            titleSlug: s.title_slug || s.titleSlug,
+            timestamp: Number(s.timestamp || s.time || 0),
+          });
+          seenSubmissionIds.add(id);
+          if (accepted.length >= limit) break;
+        }
       }
-    });
+    }
+
     hasNext = Boolean(data?.has_next ?? data?.hasNext);
-    lastKey = data?.last_key || data?.lastKey || "";
-    if (!hasNext) break;
-    offset += pageSize;
+    const nextKey = data?.last_key || data?.lastKey || "";
+
+    if (!hasNext || !nextKey || seenPageKeys.has(nextKey)) break;
+
+    seenPageKeys.add(nextKey);
+    lastKey = nextKey;
+
+   
+    await new Promise(r => setTimeout(r, 150));
   }
 
-  const seen = new Set();
-  const unique = accepted.filter((x) =>
-    seen.has(x.id) ? false : (seen.add(x.id), true)
-  );
-  return unique.slice(0, limit);
+  return accepted.slice(0, limit);
 }
 
-async function fetchSubmissionDetailsViaRest(titleSlug, submissionId) {
-  let offset = 0;
-  const pageSize = 20;
+
+async function fetchSubmissionDetailsViaRest(titleSlug, submissionId, pageSize = 20) {
   let lastKey = "";
+  const seenKeys = new Set();
+
   while (true) {
-    const url = `${BASE}/api/submissions/${titleSlug}/?offset=${offset}&limit=${pageSize}&lastkey=${encodeURIComponent(
-      lastKey || ""
-    )}`;
+    const url = `${BASE}/api/submissions/${titleSlug}/?offset=0&limit=${pageSize}&lastkey=${encodeURIComponent(lastKey)}`;
     const res = await httpGet(url, { Referer: `${BASE}/problems/${titleSlug}/` });
-    if (res.status !== 200) return null;
+
+    if (!res.ok) {
+      throw new Error(`Failed to fetch submission ${submissionId}: ${res.status} ${res.statusText}`);
+    }
+
     const data = await res.json();
-    const list = Array.isArray(data?.submissions_dump)
-      ? data.submissions_dump
-      : [];
+    const list = Array.isArray(data?.submissions_dump) ? data.submissions_dump : [];
+
+   
     const found = list.find((s) => String(s?.id) === String(submissionId));
     if (found) {
       return {
@@ -67,17 +79,27 @@ async function fetchSubmissionDetailsViaRest(titleSlug, submissionId) {
         lang: { name: found.lang },
         question: {
           title: found.title,
-          titleSlug: titleSlug,
-          questionId: found?.qid || found?.question_id || null,
+          titleSlug,
+          questionId: found.qid || found.question_id || null,
         },
       };
     }
+
+  
     const hasNext = Boolean(data?.has_next ?? data?.hasNext);
-    if (!hasNext) return null;
-    lastKey = data?.last_key || data?.lastKey || "";
-    offset += pageSize;
+    const nextKey = data?.last_key || data?.lastKey || "";
+
+    if (!hasNext || !nextKey || seenKeys.has(nextKey)) {
+      return null; 
+    }
+
+    seenKeys.add(nextKey);
+    lastKey = nextKey;
+
+    await new Promise((r) => setTimeout(r, 150)); // avoid rate limits
   }
 }
+
 
 module.exports = { fetchRecentAcceptedViaRest, fetchSubmissionDetailsViaRest };
 
