@@ -9,11 +9,11 @@ async function fetchRecentAcceptedViaRest(limit = 200, pageSize = 20) {
   let lastKey = "";
   let hasNext = true;
 
-  const seenSubmissionIds = new Set(); 
-  const seenPageKeys = new Set();     
+  const seenSubmissionIds = new Set();
+  const seenPageKeys = new Set();
 
   while (accepted.length < limit && hasNext) {
-    const url = `${BASE}/api/submissions/?offset=0&limit=${pageSize}&lastkey=${encodeURIComponent(lastKey)}`;
+    const url = `${BASE}/api/submissions/?limit=${pageSize}&lastkey=${encodeURIComponent(lastKey)}`;
     console.log(`Requesting ${url}`);
     const res = await httpGet(url, { Referer: BASE });
 
@@ -21,7 +21,6 @@ async function fetchRecentAcceptedViaRest(limit = 200, pageSize = 20) {
       throw new Error(`Failed to fetch submissions: ${res.status} ${res.statusText}`);
     }
 
-    console.log(`Received response for ${url}`);
     const data = await res.json();
     const list = Array.isArray(data?.submissions_dump) ? data.submissions_dump : [];
 
@@ -50,8 +49,7 @@ async function fetchRecentAcceptedViaRest(limit = 200, pageSize = 20) {
     seenPageKeys.add(nextKey);
     lastKey = nextKey;
 
-   
-    await new Promise(r => setTimeout(r, 150));
+    await new Promise(r => setTimeout(r, 300)); // safer wait
   }
 
   return accepted.slice(0, limit);
