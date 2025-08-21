@@ -28,12 +28,14 @@ async function runOnce() {
   let recent = [];
   try {
     recent = await fetchRecentAC(MAX_RECENT, username);
+    console.log("Fetched recent submissions via GraphQL:", recent);
   } catch (e) {
     console.log("GraphQL recent list failed, falling back to REST:", e.message);
   }
   if (!Array.isArray(recent) || recent.length === 0) {
     console.log("Falling back to /api/submissions/…");
     recent = await fetchRecentAcceptedViaRest(MAX_RECENT);
+    console.log("Fetched recent submissions via REST:", recent);
   }
 
   let newCount = 0;
