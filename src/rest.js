@@ -51,7 +51,7 @@ async function fetchRecentAcceptedViaRest(limit = 200, pageSize = 20) {
     // seenPageKeys.add(nextKey);
     // lastKey = nextKey;
 
-    await new Promise(r => setTimeout(r, 3000)); // safer wait
+    await new Promise(r => setTimeout(r, 1500)); // safer wait
   }
 
   return accepted.slice(0, limit);
@@ -102,7 +102,7 @@ async function fetchSubmissionDetailsViaRest(titleSlug, submissionId, pageSize =
     seenKeys.add(nextKey);
     lastKey = nextKey;
     console.log(`No submission ${submissionId} found, trying next page…`);
-    await new Promise((r) => setTimeout(r, 3000)); // avoid rate limits
+    await new Promise((r) => setTimeout(r, 150)); // avoid rate limits
   }
 }
 
