@@ -29,7 +29,7 @@ async function runOnce() {
   try {
     recent = await fetchRecentAC(MAX_RECENT, username);
   } catch (e) {
-    console.warn("GraphQL recent list failed, falling back to REST:", e.message);
+    console.log("GraphQL recent list failed, falling back to REST:", e.message);
   }
   if (!Array.isArray(recent) || recent.length === 0) {
     console.log("Falling back to /api/submissions/…");
