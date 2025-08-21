@@ -3,25 +3,17 @@ const { httpGet } = require("./http");
 
 async function fetchRecentAcceptedViaRest(limit = 200, pageSize = 20) {
   console.log(`Fetching recent accepted submissions via REST (limit: ${limit}, pageSize: ${pageSize})…`);
-  if (limit <= 0) return [];
 
   const accepted = [];
-  let lastKey = "";
-  let hasNext = true;
-
   const seenSubmissionIds = new Set();
-  const seenPageKeys = new Set();
-  let offset = 0;
-  while (accepted.length < limit) {
-    
-    const url = `${BASE}/api/submissions/?offset=${offset}&limit=${pageSize}&lastkey=${encodeURIComponent(lastKey)}`;
-    offset += pageSize;
+
+  let url = `${BASE}/api/submissions/?offset=0&limit=${pageSize}`;
+  let lastKey = null;
+
+  while (accepted.length < limit && url) {
     console.log(`Requesting ${url}`);
     const res = await httpGet(url, { Referer: BASE });
-
-    if (!res.ok) {
-      throw new Error(`Failed to fetch submissions: ${res.status} ${res.statusText}`);
-    }
+    if (!res.ok) throw new Error(`Failed: ${res.status} ${res.statusText}`);
 
     const data = await res.json();
     const list = Array.isArray(data?.submissions_dump) ? data.submissions_dump : [];
@@ -43,15 +35,15 @@ async function fetchRecentAcceptedViaRest(limit = 200, pageSize = 20) {
       }
     }
 
-    //hasNext = Boolean(data?.has_next ?? data?.hasNext);
-    const nextKey = data?.last_key || data?.lastKey || "";
+    // update next page URL
+    lastKey = data?.last_key || data?.lastKey || null;
+    if (lastKey) {
+      url = `${BASE}/api/submissions/?lastkey=${encodeURIComponent(lastKey)}&limit=${pageSize}`;
+    } else {
+      url = null; // no more pages
+    }
 
-    if ( !nextKey || seenPageKeys.has(nextKey)) break;
-
-    seenPageKeys.add(nextKey);
-    lastKey = nextKey;
-
-    await new Promise(r => setTimeout(r, 300)); // safer wait
+    await new Promise(r => setTimeout(r, 300)); // be polite
   }
 
   return accepted.slice(0, limit);
