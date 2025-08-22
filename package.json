@@ -1,6 +1,7 @@
 {
   "name": "leetcode-solutions",
   "version": "1.0.0",
+  "type": "module",
   "main": "fetch-leetcode.js",
   "directories": {
     "test": "tests"
