@@ -1,5 +1,6 @@
 import fs from "fs";
 import "dotenv/config";
+import { writeSolution, generateReadmeIndex } from "./src/writer.js";
 import {
   BASE_URL,
   SUBMISSIONS_URL,
@@ -63,6 +64,24 @@ async function fetchSubmissions() {
 
   fs.writeFileSync(OUTPUT_FILE, JSON.stringify(all, null, 2));
   console.log(`Saved to ${OUTPUT_FILE}`);
+  console.log("Organizing solutions into folders…");
+
+for (const s of all) {
+  try {
+    writeSolution({
+  difficulty: s?.meta?.difficulty || s?.difficulty || "Unknown",
+  questionId: s?.id || s?.question_id,
+  titleSlug: s?.title_slug || s?.titleSlug,
+  code: s?.code,
+  language: s?.lang,
+});
+  } catch (err) {
+    console.error("Failed to write solution:", s?.title_slug, err.message);
+  }
+}
+
+generateReadmeIndex();
+console.log("README.md updated with index");
 }
 
 fetchSubmissions().catch((err) => {
