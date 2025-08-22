@@ -39,16 +39,10 @@ async function runOnce() {
    await sleep(SLEEP_BETWEEN_SUBMISSIONS_MS);
 
     let details = null;
-    try {
-      details = await fetchSubmissionDetails(sid);
-    } catch (e) {
-      console.warn(`GraphQL submissionDetails failed for ${sid}:`, e.message);
-    }
-    if (!details || !details.code) {
+ 
       const rest = await fetchSubmissionDetailsViaRest(item.titleSlug, sid);
       if (!rest || !rest.code) continue;
       details = rest;
-    }
 
     const slug = details.question?.titleSlug || item.titleSlug;
     const q = await fetchQuestion(slug);
