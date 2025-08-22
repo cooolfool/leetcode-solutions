@@ -5,7 +5,7 @@
   "directories": {
     "test": "tests"
   },
-   "scripts": {
+  "scripts": {
     "fetch": "node fetch-leetcode.js",
     "organize": "node organize-from-json.js",
     "sync": "npm run fetch && npm run organize"
