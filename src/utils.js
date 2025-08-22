@@ -32,6 +32,28 @@ function ensureDir(p) {
 }
 
 
+async function graphQL(query, variables = {}, operationName = undefined) {
+  const csrf = getCookie("csrftoken") || "";
+  const res = await httpPost(
+    GRAPHQL_URL,
+    JSON.stringify({ query, variables, operationName }),
+    {
+      "Content-Type": "application/json",
+      "X-CSRFToken": csrf,
+      Referer: BASE,
+    }
+  );
+  if (res.status === 403) {
+    throw new Error("403 from LeetCode (blocked). Try later or add delays.");
+  }
+  const data = await res.json();
+  if (data.errors) {
+    throw new Error("GraphQL errors: " + JSON.stringify(data.errors));
+  }
+  return data.data;
+}
+
+
 async function fetchSignedInUsername() {
   const query = `
     query globalData {

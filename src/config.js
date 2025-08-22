@@ -16,6 +16,7 @@ const path = require("path");
 // Base URLs
 const BASE = process.env.BASE_URL;
 const LOGIN_URL = process.env.LOGIN_URL;
+const GRAPHQL_URL = `${BASE}/graphql`;
 
 
 // Output
@@ -51,6 +52,7 @@ const README_FILE = process.env.README_FILE || path.join(OUTPUT_ROOT, "README.md
 module.exports = {
   BASE,
   LOGIN_URL,
+  GRAPHQL_URL,
   OUTPUT_ROOT,
   STATE_FILE,
   MAX_RECENT,
