@@ -2,7 +2,7 @@ const fs = require("fs");
 const path = require("path");
 
 // Base URLs
-const BASE = "https://leetcode.com";
+const BASE_URL = "https://leetcode.com";
 const LOGIN_URL = `${BASE}/accounts/login/`;
 const SUBMISSIONS_URL = `${BASE}/api/submissions/`;
 
