@@ -1,48 +1,24 @@
-const fs = require("fs");
-const path = require("path");
+import fs from "fs";
+import path from "path";
 
-// Base URLs
-const BASE_URL = "https://leetcode.com";
-const LOGIN_URL = `${BASE}/accounts/login/`;
-const SUBMISSIONS_URL = `${BASE}/api/submissions/`;
+export const BASE_URL = "https://leetcode.com";
+export const LOGIN_URL = `${BASE_URL}/accounts/login/`;
+export const SUBMISSIONS_URL = `${BASE_URL}/api/submissions/`;
 
-const OUTPUT_ROOT = "."; // repo root
-const STATE_FILE = "last_sync.json";
+export const OUTPUT_ROOT = ".";
+export const STATE_FILE = "last_sync.json";
 
-// Tuning
-const MAX_RECENT = Number(process.env.MAX_RECENT || 2000);   // max number of submissions to fetch
-const PAGE_SIZE = Number(process.env.PAGE_SIZE || 20);       // number of submissions per page
-const SYNC_POLL_SECONDS = Number(process.env.SYNC_POLL_SECONDS || 0);
+export const MAX_RECENT = Number(process.env.MAX_RECENT || 2000);
+export const PAGE_SIZE = Number(process.env.PAGE_SIZE || 20);
+export const SYNC_POLL_SECONDS = Number(process.env.SYNC_POLL_SECONDS || 0);
 
-// Request delay
-const REQUEST_DELAY_MS = Number(process.env.REQUEST_DELAY_MS || 1500); // milliseconds
+export const REQUEST_DELAY_MS = Number(process.env.REQUEST_DELAY_MS || 1500);
 
-// Git
-const GIT_REMOTE = process.env.GIT_REMOTE || "origin";
-const GIT_BRANCH = process.env.GIT_BRANCH || "main";
+export const GIT_REMOTE = process.env.GIT_REMOTE || "origin";
+export const GIT_BRANCH = process.env.GIT_BRANCH || "main";
 
-// Credentials / Cookies
-const USERNAME = process.env.LEETCODE_USERNAME;
-const PASSWORD = process.env.LEETCODE_PASSWORD;
-const COOKIE_STRING = process.env.LEETCODE_COOKIES;
-const COOKIE_SESSION = process.env.LEETCODE_SESSION;
-const COOKIE_CSRF = process.env.LEETCODE_CSRFTOKEN || process.env.LEETCODE_CSRF;
-
-module.exports = {
-  BASE_URL,
-  LOGIN_URL,
-  SUBMISSIONS_URL,
-  OUTPUT_ROOT,
-  STATE_FILE,
-  MAX_RECENT,
-  PAGE_SIZE,
-  SYNC_POLL_SECONDS,
-  REQUEST_DELAY_MS,
-  GIT_REMOTE,
-  GIT_BRANCH,
-  USERNAME,
-  PASSWORD,
-  COOKIE_STRING,
-  COOKIE_SESSION,
-  COOKIE_CSRF,
-};
+export const USERNAME = process.env.LEETCODE_USERNAME;
+export const PASSWORD = process.env.LEETCODE_PASSWORD;
+export const COOKIE_STRING = process.env.LEETCODE_COOKIES;
+export const COOKIE_SESSION = process.env.LEETCODE_SESSION;
+export const COOKIE_CSRF = process.env.LEETCODE_CSRFTOKEN || process.env.LEETCODE_CSRF;
