@@ -1,13 +1,14 @@
 {
   "name": "leetcode-solutions",
   "version": "1.0.0",
-  "type": "module",
   "main": "fetch-leetcode.js",
   "directories": {
     "test": "tests"
   },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+   "scripts": {
+    "fetch": "node fetch-leetcode.js",
+    "organize": "node organize-from-json.js",
+    "sync": "npm run fetch && npm run organize"
   },
   "repository": {
     "type": "git",

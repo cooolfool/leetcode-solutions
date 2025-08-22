@@ -1,8 +1,6 @@
-
 const fs = require("fs");
 const path = require("path");
 const { writeSolution, generateReadmeIndex } = require("./src/files");
-
 
 const INPUT = path.resolve("./submissions.json");
 if (!fs.existsSync(INPUT)) {
@@ -44,17 +42,16 @@ for (const sub of rows) {
   if (!isAccepted(sub)) continue;
 
   const difficulty = normDifficulty(sub.difficulty ?? sub.level);
-  const questionId =
-    String(
-      sub.questionId ??
-      sub.question_id ??
-      sub.questionFrontendId ??
-      sub.frontendId ??
-      sub.qid ??
-      sub.frontend_id ??
-      sub.id ?? 
-      "unknown"
-    );
+  const questionId = String(
+    sub.questionId ??
+    sub.question_id ??
+    sub.questionFrontendId ??
+    sub.frontendId ??
+    sub.qid ??
+    sub.frontend_id ??
+    sub.id ??
+    "unknown"
+  );
 
   const titleSlug =
     sub.titleSlug ??
@@ -64,23 +61,12 @@ for (const sub of rows) {
   const language = sub.language ?? sub.lang ?? sub.langName ?? sub.lang_name ?? "text";
   const code = sub.code ?? sub.submissionCode ?? sub.solutionCode ?? "";
 
-  if (!code) {
-    // skip entries that don't include code in the JSON
-    continue;
-  }
+  if (!code) continue; // don’t create empty files
 
-  const { fpath } = writeSolution({
-    difficulty,
-    questionId,
-    titleSlug,
-    code,
-    language,
-  });
-
+  const { fpath } = writeSolution({ difficulty, questionId, titleSlug, code, language });
   console.log(`Saved: ${fpath}`);
   saved++;
 }
 
 generateReadmeIndex();
-
 console.log(`\nDone. Organized ${saved} solution(s).`);
