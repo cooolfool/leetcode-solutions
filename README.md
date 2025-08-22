@@ -128,6 +128,7 @@ Auto-synced from LeetCode accepted submissions. Folder structure: `<difficulty>/
 | [921. minimum](https://leetcode.com/problems/minimum/) | [921_minimum_add_to_make_parentheses_valid.cpp](medium/921_minimum_add_to_make_parentheses_valid.cpp) |
 | [946. validate](https://leetcode.com/problems/validate/) | [946_validate_stack_sequences.cpp](medium/946_validate_stack_sequences.cpp) |
 | [1003. check](https://leetcode.com/problems/check/) | [1003_check_if_word_is_valid_after_substitutions.cpp](medium/1003_check_if_word_is_valid_after_substitutions.cpp) |
+| [1004. max](https://leetcode.com/problems/max/) | [1004_max_consecutive_ones_iii.java](medium/1004_max_consecutive_ones_iii.java) |
 | [1209. remove](https://leetcode.com/problems/remove/) | [1209_remove_all_adjacent_duplicates_in_string_ii.cpp](medium/1209_remove_all_adjacent_duplicates_in_string_ii.cpp) |
 | [1249. minimum](https://leetcode.com/problems/minimum/) | [1249_minimum_remove_to_make_valid_parentheses.cpp](medium/1249_minimum_remove_to_make_valid_parentheses.cpp) |
 | [1381. design](https://leetcode.com/problems/design/) | [1381_design_a_stack_with_increment_operation.cpp](medium/1381_design_a_stack_with_increment_operation.cpp) |
