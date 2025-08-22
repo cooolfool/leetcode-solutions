@@ -1,4 +1,4 @@
-import fetch from "node-fetch";
+//import fetch from "node-fetch";
 import fs from "fs";
 import "dotenv/config";
 import { LEETCODE_SESSION, PAGE_SIZE, MAX_FETCH, OUTPUT_FILE, BASE_URL, REQUEST_DELAY_MS } from "./config.js";
