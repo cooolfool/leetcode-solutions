@@ -3,7 +3,6 @@ const {  SYNC_POLL_SECONDS,
   USERNAME,
   SLEEP_BETWEEN_SUBMISSIONS_MS} = require("./src/config");
 const { login } = require("./src/login");
-const { fetchSignedInUsername, fetchRecentAC, fetchSubmissionDetails, fetchQuestion } = require("./src/graphql");
 const { fetchRecentAcceptedViaRest, fetchSubmissionDetailsViaRest } = require("./src/rest");
 const { loadState, saveState } = require("./src/state");
 const { writeSolution, generateReadmeIndex } = require("./src/files");
