@@ -25,8 +25,8 @@ jobs:
 
       - name: Run fetch-leetcode.js
         env:
-          LEETCODE_BASE_URL: ${{ secrets.LEETCODE_BASE_URL }}
-          LEETCODE_LOGIN_URL: ${{ secrets.LEETCODE_LOGIN_URL }}
+          BASE_URL: ${{ secrets.BASE_URL }}
+          LOGIN_URL: ${{ secrets.LOGIN_URL }}
           LEETCODE_USERNAME: ${{ secrets.LEETCODE_USERNAME }}
           LEETCODE_PASSWORD: ${{ secrets.LEETCODE_PASSWORD }}
           # OR
