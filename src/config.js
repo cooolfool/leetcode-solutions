@@ -25,12 +25,12 @@ const STATE_FILE = "last_sync.json";
 // Tuning
 const MAX_RECENT = Number(20000);
 const SYNC_POLL_SECONDS = Number(process.env.SYNC_POLL_SECONDS || 0);
-const SLEEP_BETWEEN_SUBMISSIONS_MS = Number(process.env.SLEEP_BETWEEN_SUBMISSIONS_MS || 500);
+const SLEEP_BETWEEN_SUBMISSIONS_MS = Number(process.env.SLEEP_BETWEEN_SUBMISSIONS_MS || 1500);
 
 // REST / API
 const REST_PAGE_SIZE = Number(process.env.REST_PAGE_SIZE || 20);
 const REST_SLEEP_BETWEEN_REQUESTS_MS = Number(process.env.REST_SLEEP_BETWEEN_REQUESTS_MS || 1500);
-const REST_SLEEP_BETWEEN_PAGES_MS = Number(process.env.REST_SLEEP_BETWEEN_PAGES_MS || 150);
+const REST_SLEEP_BETWEEN_PAGES_MS = Number(process.env.REST_SLEEP_BETWEEN_PAGES_MS || 1500);
 
 
 // Git
