@@ -1,10 +1,20 @@
-//import fetch from "node-fetch";
 import fs from "fs";
 import "dotenv/config";
-import { LEETCODE_SESSION, PAGE_SIZE, MAX_FETCH, OUTPUT_FILE, BASE_URL, REQUEST_DELAY_MS } from "./src/config.js";
+import {
+  BASE_URL,
+  SUBMISSIONS_URL,
+  PAGE_SIZE,
+  MAX_RECENT,
+  OUTPUT_ROOT,
+  REQUEST_DELAY_MS,
+  COOKIE_SESSION,
+} from "./src/config.js";
+
+
+const OUTPUT_FILE = `${OUTPUT_ROOT}/submissions.json`;
 
 // -----------------------------------------
-if (!LEETCODE_SESSION) {
+if (!COOKIE_SESSION) {
   console.error("Missing LEETCODE_SESSION in .env file");
   process.exit(1);
 }
@@ -14,15 +24,17 @@ async function fetchSubmissions() {
   let offset = 0;
   let page = 1;
 
-  console.log(`Fetching recent accepted submissions (limit: ${MAX_FETCH}, pageSize: ${PAGE_SIZE})…`);
+  console.log(
+    `Fetching recent accepted submissions (limit: ${MAX_RECENT}, pageSize: ${PAGE_SIZE})…`
+  );
 
   while (true) {
-    const url = `${BASE_URL}?offset=${offset}&limit=${PAGE_SIZE}&lastkey=`;
+    const url = `${SUBMISSIONS_URL}?offset=${offset}&limit=${PAGE_SIZE}&lastkey=`;
     console.log(`Page ${page}: offset=${offset}`);
 
     const res = await fetch(url, {
       headers: {
-        Cookie: `LEETCODE_SESSION=${LEETCODE_SESSION};`,
+        Cookie: `LEETCODE_SESSION=${COOKIE_SESSION};`,
         "User-Agent": "Mozilla/5.0",
       },
     });
@@ -35,10 +47,12 @@ async function fetchSubmissions() {
     const data = await res.json();
 
     // filter only Accepted
-    const accepted = data.submissions_dump.filter((s) => s.status_display === "Accepted");
+    const accepted = data.submissions_dump.filter(
+      (s) => s.status_display === "Accepted"
+    );
     all.push(...accepted);
 
-    if (!data.has_next || all.length >= MAX_FETCH) break;
+    if (!data.has_next || all.length >= MAX_RECENT) break;
 
     offset += PAGE_SIZE;
     page++;
