@@ -31,6 +31,95 @@ function ensureDir(p) {
   fs.mkdirSync(p, { recursive: true });
 }
 
-module.exports = { sleep, langToExt, sanitizeSlug, ensureDir };
+
+async function fetchSignedInUsername() {
+  const query = `
+    query globalData {
+      userStatus {
+        username
+        isSignedIn
+        userSlug
+      }
+    }
+  `;
+  const data = await graphQL(query, {});
+  return data?.userStatus?.username || null;
+}
+
+async function fetchRecentAC(username, totalLimit = MAX_RECENT, pageSize = 20) {
+  let allSubs = [];
+  let page = 0;
+
+  while (allSubs.length < totalLimit) {
+    const data = await graphQL(
+      `
+      query recentAcSubmissions($limit: Int!, $skip: Int!, $username: String!) {
+        recentAcSubmissionList(limit: $limit, skip: $skip, username: $username) {
+          id
+          title
+          titleSlug
+          timestamp
+        }
+      }
+      `,
+      { limit: pageSize, skip: page * pageSize, username }
+    );
+
+    const subs = data.recentAcSubmissionList || [];
+    allSubs.push(...subs);
+
+    if (subs.length < pageSize) break; // no more submissions
+    page++;
+  }
+
+  return allSubs.slice(0, totalLimit);
+}
+
+
+async function fetchSubmissionDetails(submissionId) {
+  const query = `
+    query submissionDetails($submissionId: Int!) {
+      submissionDetails(submissionId: $submissionId) {
+        id
+        code
+        lang {
+          name
+        }
+        question {
+          title
+          titleSlug
+          questionId
+        }
+      }
+    }
+  `;
+  const data = await graphQL(query, { submissionId: Number(submissionId) });
+  return data.submissionDetails;
+}
+
+
+async function fetchQuestion(titleSlug) {
+  const query = `
+    query questionData($titleSlug: String!) {
+      question(titleSlug: $titleSlug) {
+        questionId
+        questionFrontendId
+        title
+        titleSlug
+        difficulty
+      }
+    }
+  `;
+  const data = await graphQL(query, { titleSlug });
+  return data.question;
+}
+
+
+
+module.exports = { sleep, langToExt, sanitizeSlug, ensureDir,
+  fetchSignedInUsername,
+  fetchRecentAC,
+  fetchSubmissionDetails,
+  fetchQuestion,};
 
 

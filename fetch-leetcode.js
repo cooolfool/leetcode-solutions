@@ -7,7 +7,7 @@ const { fetchRecentAcceptedViaRest, fetchSubmissionDetailsViaRest } = require(".
 const { loadState, saveState } = require("./src/state");
 const { writeSolution, generateReadmeIndex } = require("./src/files");
 const { commitAndPush } = require("./src/git");
-const { sleep } = require("./src/utils");
+const { sleep,fetchQuestion } = require("./src/utils");
 
 async function runOnce() {
   console.log("Logging in…");
