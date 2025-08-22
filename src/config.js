@@ -14,9 +14,9 @@ const path = require("path");
 //}
 
 // Base URLs
-const BASE = "https://leetcode.com";
-const LOGIN_URL = `${BASE}/accounts/login/`;
-const GRAPHQL_URL = `${BASE}/graphql`;
+const BASE = process.env.BASE_URL;
+const LOGIN_URL = process.env.LOGIN_URL;
+
 
 // Output
 const OUTPUT_ROOT = "."; // repo root
