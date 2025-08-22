@@ -29,7 +29,7 @@ const COOKIE_SESSION = process.env.LEETCODE_SESSION;
 const COOKIE_CSRF = process.env.LEETCODE_CSRFTOKEN || process.env.LEETCODE_CSRF;
 
 module.exports = {
-  BASE,
+  BASE_URL,
   LOGIN_URL,
   SUBMISSIONS_URL,
   OUTPUT_ROOT,
