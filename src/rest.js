@@ -1,21 +1,18 @@
-const { BASE } = require("./config");
+const { BASE, REST_PAGE_SIZE, REST_SLEEP_BETWEEN_REQUESTS_MS, REST_SLEEP_BETWEEN_PAGES_MS } = require("./config");
 const { httpGet } = require("./http");
 
-async function fetchRecentAcceptedViaRest(limit = 200, pageSize = 20) {
+async function fetchRecentAcceptedViaRest(limit = 200, pageSize = REST_PAGE_SIZE) {
   console.log(`Fetching recent accepted submissions via REST (limit: ${limit}, pageSize: ${pageSize})…`);
   if (limit <= 0) return [];
 
   const accepted = [];
-  let lastKey = "";
-  let hasNext = true;
-
-  const seenSubmissionIds = new Set();
-  const seenPageKeys = new Set();
   let offset = 0;
+  const seenSubmissionIds = new Set();
+
   while (accepted.length < limit) {
-    
-    const url = `${BASE}/api/submissions/?offset=${offset}&limit=20&lastkey=`;
+    const url = `${BASE}/api/submissions/?offset=${offset}&limit=${pageSize}&lastkey=`;
     offset += pageSize;
+
     console.log(`Requesting ${url}`);
     const res = await httpGet(url, { Referer: BASE });
 
@@ -43,30 +40,25 @@ async function fetchRecentAcceptedViaRest(limit = 200, pageSize = 20) {
       }
     }
 
-    hasNext = Boolean(data?.has_next ?? data?.hasNext);
-   // const nextKey = data?.last_key || data?.lastKey || "";
-
+    const hasNext = Boolean(data?.has_next ?? data?.hasNext);
     if (!hasNext) break;
 
-    // seenPageKeys.add(nextKey);
-    // lastKey = nextKey;
-
-    await new Promise(r => setTimeout(r, 1500)); // safer wait
+    await new Promise(r => setTimeout(r, REST_SLEEP_BETWEEN_REQUESTS_MS)); 
   }
 
   return accepted.slice(0, limit);
 }
 
 
-async function fetchSubmissionDetailsViaRest(titleSlug, submissionId, pageSize = 20) {
+async function fetchSubmissionDetailsViaRest(titleSlug, submissionId, pageSize = REST_PAGE_SIZE) {
   console.log(`Fetching submission details for ${submissionId} (${titleSlug}) via REST…`);
   let lastKey = "";
   const seenKeys = new Set();
 
   while (true) {
     const url = `${BASE}/api/submissions/${titleSlug}/?offset=0&limit=${pageSize}&lastkey=${encodeURIComponent(lastKey)}`;
-    const res = await httpGet(url, { Referer: `${BASE}/problems/${titleSlug}/` });
     console.log(`Requesting ${url}`);
+    const res = await httpGet(url, { Referer: `${BASE}/problems/${titleSlug}/` });
 
     if (!res.ok) {
       throw new Error(`Failed to fetch submission ${submissionId}: ${res.status} ${res.statusText}`);
@@ -75,8 +67,7 @@ async function fetchSubmissionDetailsViaRest(titleSlug, submissionId, pageSize =
     const data = await res.json();
     const list = Array.isArray(data?.submissions_dump) ? data.submissions_dump : [];
 
-   
-    const found = list.find((s) => String(s?.id) === String(submissionId));
+    const found = list.find(s => String(s?.id) === String(submissionId));
     if (found) {
       console.log(`Found submission ${submissionId} (${titleSlug}) via REST.`);
       return {
@@ -91,22 +82,17 @@ async function fetchSubmissionDetailsViaRest(titleSlug, submissionId, pageSize =
       };
     }
 
-  
     const hasNext = Boolean(data?.has_next ?? data?.hasNext);
     const nextKey = data?.last_key || data?.lastKey || "";
 
-    if (!hasNext || !nextKey || seenKeys.has(nextKey)) {
-      return null; 
-    }
+    if (!hasNext || !nextKey || seenKeys.has(nextKey)) return null;
 
     seenKeys.add(nextKey);
     lastKey = nextKey;
     console.log(`No submission ${submissionId} found, trying next page…`);
-    await new Promise((r) => setTimeout(r, 150)); // avoid rate limits
+
+    await new Promise(r => setTimeout(r, REST_SLEEP_BETWEEN_PAGES_MS));
   }
 }
 
-
 module.exports = { fetchRecentAcceptedViaRest, fetchSubmissionDetailsViaRest };
-
-

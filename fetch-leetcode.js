@@ -1,4 +1,7 @@
-const { SYNC_POLL_SECONDS, MAX_RECENT, USERNAME } = require("./src/config");
+const {  SYNC_POLL_SECONDS,
+  MAX_RECENT,
+  USERNAME,
+  SLEEP_BETWEEN_SUBMISSIONS_MS} = require("./src/config");
 const { login } = require("./src/login");
 const { fetchSignedInUsername, fetchRecentAC, fetchSubmissionDetails, fetchQuestion } = require("./src/graphql");
 const { fetchRecentAcceptedViaRest, fetchSubmissionDetailsViaRest } = require("./src/rest");
@@ -26,24 +29,15 @@ async function runOnce() {
 
   console.log("Fetching recent AC submissions…");
   let recent = [];
-  try {
-    recent = await fetchRecentAC(MAX_RECENT, username);
-    console.log("Fetched recent submissions via GraphQL:", recent);
-  } catch (e) {
-    console.log("GraphQL recent list failed, falling back to REST:", e.message);
-  }
-  if (!Array.isArray(recent) || recent.length === 0) {
-    console.log("Falling back to /api/submissions/…");
     recent = await fetchRecentAcceptedViaRest(MAX_RECENT);
     console.log("Fetched recent submissions via REST:", recent);
-  }
 
   let newCount = 0;
 
   for (const item of recent) {
     const sid = String(item.id);
     if (processed.has(sid)) continue;
-    await sleep(500);
+   await sleep(SLEEP_BETWEEN_SUBMISSIONS_MS);
 
     let details = null;
     try {
