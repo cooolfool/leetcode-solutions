@@ -88,7 +88,9 @@ Auto-synced from LeetCode accepted submissions. Folder structure: `<difficulty>/
 ## Medium
 | Problem | File |
 |---|---|
+| [2. add](https://leetcode.com/problems/add/) | [2_add_two_numbers.java](medium/2_add_two_numbers.java) |
 | [3. longest](https://leetcode.com/problems/longest/) | [3_longest_substring_without_repeating_characters.java](medium/3_longest_substring_without_repeating_characters.java) |
+| [5. longest](https://leetcode.com/problems/longest/) | [5_longest_palindromic_substring.java](medium/5_longest_palindromic_substring.java) |
 | [7. reverse](https://leetcode.com/problems/reverse/) | [7_reverse_integer.java](medium/7_reverse_integer.java) |
 | [11. container](https://leetcode.com/problems/container/) | [11_container_with_most_water.java](medium/11_container_with_most_water.java) |
 | [15. 3sum](https://leetcode.com/problems/3sum/) | [15_3sum.java](medium/15_3sum.java) |
@@ -99,6 +101,8 @@ Auto-synced from LeetCode accepted submissions. Folder structure: `<difficulty>/
 | [45. jump](https://leetcode.com/problems/jump/) | [45_jump_game_ii.java](medium/45_jump_game_ii.java) |
 | [49. group](https://leetcode.com/problems/group/) | [49_group_anagrams.java](medium/49_group_anagrams.java) |
 | [55. jump](https://leetcode.com/problems/jump/) | [55_jump_game.java](medium/55_jump_game.java) |
+| [56. merge](https://leetcode.com/problems/merge/) | [56_merge_intervals.java](medium/56_merge_intervals.java) |
+| [57. insert](https://leetcode.com/problems/insert/) | [57_insert_interval.java](medium/57_insert_interval.java) |
 | [73. set](https://leetcode.com/problems/set/) | [73_set_matrix_zeroes.cpp](medium/73_set_matrix_zeroes.cpp) |
 | [73. set](https://leetcode.com/problems/set/) | [73_set_matrix_zeroes.java](medium/73_set_matrix_zeroes.java) |
 | [74. search](https://leetcode.com/problems/search/) | [74_search_a_2d_matrix.java](medium/74_search_a_2d_matrix.java) |
