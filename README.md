@@ -107,6 +107,7 @@ Auto-synced from LeetCode accepted submissions. Folder structure: `<difficulty>/
 | [73. set](https://leetcode.com/problems/set/) | [73_set_matrix_zeroes.java](medium/73_set_matrix_zeroes.java) |
 | [74. search](https://leetcode.com/problems/search/) | [74_search_a_2d_matrix.java](medium/74_search_a_2d_matrix.java) |
 | [75. sort](https://leetcode.com/problems/sort/) | [75_sort_colors.cpp](medium/75_sort_colors.cpp) |
+| [75. sort](https://leetcode.com/problems/sort/) | [75_sort_colors.java](medium/75_sort_colors.java) |
 | [80. remove](https://leetcode.com/problems/remove/) | [80_remove_duplicates_from_sorted_array_ii.java](medium/80_remove_duplicates_from_sorted_array_ii.java) |
 | [81. search](https://leetcode.com/problems/search/) | [81_search_in_rotated_sorted_array_ii.java](medium/81_search_in_rotated_sorted_array_ii.java) |
 | [122. best](https://leetcode.com/problems/best/) | [122_best_time_to_buy_and_sell_stock_ii.java](medium/122_best_time_to_buy_and_sell_stock_ii.java) |
